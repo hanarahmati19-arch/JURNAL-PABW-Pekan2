@@ -9,8 +9,7 @@
 <body>
     <main class="page-shell">
         <section class="form-card">
-            <p class="eyebrow">BPBD Kabupaten Bandung</p>
-            <h1>Laporan Banjir</h1>
+            <p class="eyebrow"></p>
             <p class="intro">Silakan isi data kejadian banjir dengan lengkap.</p>
 
             <form action="{{ url('/proses') }}" method="post">
