@@ -1,27 +1,24 @@
 <?php
 
-use App\Http\Controllers\DataController;
-use App\Http\Controllers\LogistikController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-// 1. Redirect URL utama '/' langsung ke form lapor
-Route::redirect('/', '/lapor');
 
-// 2. Route Fitur Lapor Banjir
-Route::get('/lapor', 'App\\Http\\Controllers\\DataController@index')->name('lapor.form');
-Route::post('/lapor', [DataController::class, 'proses'])->name('lapor.proses');
-
-// (Opsional) Jika route daftar laporan sudah siap di controller:
-Route::get('/lapor/daftar', [DataController::class, 'daftar'])->name('lapor.daftar');
-
-// 3. Route Fitur Logistik
-Route::get('/logistik', [LogistikController::class, 'index'])->name('logistik.index');
-Route::post('/logistik/hitung', [LogistikController::class, 'hitung'])->name('logistik.hitung');
-
-// 4. Route Test JSON (kalau masih dipakai)
-Route::get('/test', function () {
-    return response()->json([
-        'nama' => 'John Doe',
-        'usia' => 25,
-        'pekerjaan' => 'Programmer'
-    ]);
+Route::get('/', function () {
+    return redirect()->route('laporan.form');
 });
+
+Route::get('/banjir', [LaporanController::class, 'form'])->name('laporan.form');
+Route::get('/proses', fn () => redirect()->route('laporan.form'))->name('laporan.proses');
+Route::post('/proses', [LaporanController::class, 'kirim'])->name('laporan.kirim');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', fn () => redirect()->route('laporan.daftar'))->name('dashboard');
+    Route::get('/laporan', [LaporanController::class, 'daftar'])->name('laporan.daftar');
+    Route::get('/profil', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

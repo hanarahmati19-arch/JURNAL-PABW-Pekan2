@@ -1,0 +1,8 @@
+{
+    "agents": [
+        "factory"
+    ],
+    "mcp": true,
+    "nightwatch": false,
+    "sail": false
+}
